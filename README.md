@@ -13,9 +13,9 @@ o refinamento da solução (ou seja, uma diminuição do custo) até chegar em u
 levemente a solução encontrada, para então repetir o processo iterativo.
 
 Os passos são:
-    * Construção
-    * Busca Local
-    * Pertubação
+* Construção
+* Busca Local
+* Pertubação
 
 Vou implementar as funções de cada etapa em um .h separadamente, para então junta-los em uma
 biblioteca conjunta com quaisquer outras funções necessárias.
@@ -26,12 +26,15 @@ Na main vão ter o maxIter e maxIterIls, que serão parâmetros na chamada da fu
 
 Por conta do leitor de instâncias, preciso instalar o **make** na minha máquina,
 aqui no notebook eu usei o seguinte código:
+
     winget install ezwinports.make
 
 Pra compilar o tsp:
+
     g++ src\*.cpp -O3 -o tsp.exe
 
 Então, pra compilar tudo junto
+
     g++ -O3 leitor-instancias/src/*.cpp main.cpp -o teste
 
 ## Estrutura do projeto
@@ -47,7 +50,9 @@ Então, pra compilar tudo junto
 ## Rodar o código com uma instância
 
 Compilar o programa: 
+
     g++ -O3 main.cpp leitor-instancias/scr/Data.cpp -o programa.exe
 
 Rodar uma instância:
+
     .\programa.exe leitor-instancias/instances/nomedainstancia.tsp
