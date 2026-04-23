@@ -1,6 +1,5 @@
 #include <iostream>     // cout
 #include <vector>       // vetor 
-#include <algorithm>    // sort
 #include "leitor-instancias/src/Data.h"
 
 using namespace std;

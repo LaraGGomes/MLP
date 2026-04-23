@@ -1,5 +1,6 @@
 #include "Solucao.h"
-#include <cstdlib>  // rand
+#include <cstdlib>      // rand
+#include <algorithm>    // find
 
 using namespace std;
 
@@ -125,6 +126,8 @@ Solucao Construcao(Data& data) {
 
         CL.erase(CL.begin() + selecionado); // removendo o nó selecionado do CL
     }
+
+    calcularCusto(data, &s);
 
     return s;
 }
