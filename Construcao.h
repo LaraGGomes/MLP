@@ -10,14 +10,14 @@ typedef struct InsertionInfo {
 }InsertionInfo;
 
 // protótipo das funções necessárias
-vector<InsertionInfo> calcularCustoInsercao(Data *data, Solucao& s, vector<int>& CL);
-vector<int> escolher3NosAleatorios(Data *data);
-vector<int> nosRestantes(Data *data, vector<int> sequencia);
+vector<InsertionInfo> calcularCustoInsercao(Data& data, Solucao& s, vector<int>& CL);
+vector<int> escolher3NosAleatorios(Data& data);
+vector<int> nosRestantes(Data& data, vector<int> sequencia);
 void ordenarEmOrdemCrescente(vector<InsertionInfo>& custoInsercao);
 void inserirNaSolucao(Solucao& s, InsertionInfo selecionado);
 
 // vai receber um subtour aleatório, e CL são os vértices restantes não inclusos no subtour
-vector<InsertionInfo> calcularCustoInsercao(Data *data, Solucao& s, vector<int>& CL) {
+vector<InsertionInfo> calcularCustoInsercao(Data& data, Solucao& s, vector<int>& CL) {
 
     vector<InsertionInfo> custoInsercao((s.sequence.size() - 1) * CL.size());   // delimitando tamanho do vetor
     int l = 0;
@@ -29,7 +29,7 @@ vector<InsertionInfo> calcularCustoInsercao(Data *data, Solucao& s, vector<int>&
         // para cada nó restante, vamos registrar as informações de inserção em uma posição do vetor 
         for (auto k : CL) {
             // novo custo é calculado adicionando as distância entre a nova aresta e os vértices e removendo a distância entre os dois vértices
-            custoInsercao[l].custo = data->d(i, k) + data->d(j, k) - data->d(i, j);
+            custoInsercao[l].custo = data.d(i, k) + data.d(j, k) - data.d(i, j);
             custoInsercao[l].noInserido = k;
             custoInsercao[l].arestaRemovida = a;
 
@@ -39,7 +39,7 @@ vector<InsertionInfo> calcularCustoInsercao(Data *data, Solucao& s, vector<int>&
     return custoInsercao;   
 }
 
-vector<int> escolher3NosAleatorios(Data *data) {
+vector<int> escolher3NosAleatorios(Data& data) {
     vector<int> s;
 
     s.push_back(1);
@@ -49,7 +49,7 @@ vector<int> escolher3NosAleatorios(Data *data) {
         bool rep = true;    // checagem de repetição de vértice
 
         while(rep) {
-            no = rand() % data->getDimension() + 1; 
+            no = rand() % data.getDimension() + 1; 
 
             // vai procurar o no aleatorizado no vetor, se não encontra retorna s.end() 
             if (find(s.begin(), s.end(), no) == s.end()) {
@@ -63,11 +63,11 @@ vector<int> escolher3NosAleatorios(Data *data) {
     return s;
 }
 
-vector<int> nosRestantes(Data *data, vector<int> sequencia) {
+vector<int> nosRestantes(Data& data, vector<int> sequencia) {
     vector<int> CL;
 
     // aqui o intuito é inserir cada vértice no vetor, caso ele não seja encontrado na sequência
-    for (int i = 1; i <= data->getDimension(); i++) {
+    for (int i = 1; i <= data.getDimension(); i++) {
         if (find(sequencia.begin(), sequencia.end(), i) == sequencia.end()) {
             CL.push_back(i);
         }
@@ -108,7 +108,7 @@ void inserirNaSolucao(Solucao& s, InsertionInfo selecionado) {
     s.cost = selecionado.custo;
 }
 
-Solucao Construcao(Data *data) {
+Solucao Construcao(Data& data) {
     // vamos criar uma solução parcial com 3 nós aleatórios e guardar os nós restantes em CL
     Solucao s;
 

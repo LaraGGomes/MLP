@@ -18,7 +18,7 @@ typedef struct Solucao {
 
 // protótipos das funções de solução
 void exibirSolucao(Solucao *s);
-void calcularCusto(Data *data, Solucao *s);
+void calcularCusto(Data& data, Solucao *s);
 
 void exibirSolucao(Solucao *s) {
     for (int i = 0; i < s->sequence.size() - 1; i++) 
@@ -27,9 +27,9 @@ void exibirSolucao(Solucao *s) {
     cout << s->sequence.back() << endl;
 }
 
-void calcularCusto(Data *data, Solucao *s) {
+void calcularCusto(Data& data, Solucao *s) {
     s->cost = 0;
     for (int i = 0; i < s->sequence.size() - 1; i++)
-        s->cost += data->getDistance(s->sequence[i], s->sequence[i+1]);
+        s->cost += data.d(s->sequence[i], s->sequence[i+1]);
         // o getDistance(x, y) é o matrizAdj[x][y]
 }
