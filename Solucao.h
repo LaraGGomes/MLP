@@ -1,14 +1,11 @@
+#ifndef SOLUCAO_H
+#define SOLUCAO_H
+
 #include <iostream>     // cout
 #include <vector>       // vetor 
 #include "leitor-instancias/src/Data.h"
 
 using namespace std;
-/*uso ou não?? não afeta performance, afeta miiiiinimamente tempo de execução, 
-mas a pira mesmo seria eu considerar o que ficaria mais bonitinho
-*/
-
-#define d(x, y) getDistance(x, y);
-// pra simplificar o getDistance, que calcula o custo entre dois vértices
 
 typedef struct Solucao {
     vector<int> sequence;
@@ -19,16 +16,7 @@ typedef struct Solucao {
 void exibirSolucao(Solucao *s);
 void calcularCusto(Data& data, Solucao *s);
 
-void exibirSolucao(Solucao *s) {
-    for (int i = 0; i < s->sequence.size() - 1; i++) 
-        cout << s->sequence[i] << " -> ";
+#define d(x, y) getDistance(x, y)
+// pra simplificar o getDistance, que calcula o custo entre dois vértices
 
-    cout << s->sequence.back() << endl;
-}
-
-void calcularCusto(Data& data, Solucao *s) {
-    s->cost = 0;
-    for (int i = 0; i < s->sequence.size() - 1; i++)
-        s->cost += data.d(s->sequence[i], s->sequence[i+1]);
-        // o getDistance(x, y) é o matrizAdj[x][y]
-}
+#endif
