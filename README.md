@@ -37,7 +37,7 @@ Pra compilar o tsp:
 
 Então, pra compilar tudo junto
 
-    g++ -O3 leitor-instancias/src/*.cpp main.cpp -o teste
+    g++ -O3 *.cpp leitor-instancias/src/*.cpp -o tsp.exe
 
 ## Estrutura do projeto
 
@@ -53,7 +53,7 @@ Então, pra compilar tudo junto
 
 Compilar o programa: 
 
-    g++ -O3 main.cpp leitor-instancias/src/Data.cpp -o programa.exe
+    g++ -O3 main.cpp leitor-instancias/src/Data.cpp -o tsp.exe
 
 Rodar uma instância:
 
