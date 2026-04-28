@@ -28,13 +28,18 @@ Solucao Pertubacao(Data& data, Solucao* s) {
     bool conflito = true;
     int i1, i2;         // intervalos dos segmentos
     int pos1, pos2;     // posição inicial de cada intervalo
-    int max = (s->sequence.size() - 1) % 10;   // perguntar pra Marcelo se é módulo de 10 ou to interpretando errado
+    int max = ceil((s->sequence.size() - 1) / 10.0);   // perguntar pra Marcelo se é módulo de 10 ou to interpretando errado
 
     novaS.sequence = s->sequence;
 
     srand(time(NULL));
-    i1 = 2 + rand() % (max - 1);
-    i2 = 2 + rand() % (max - 1);
+    
+    if (max <= 2)
+        i1 = i2 = 2;
+    else {
+        i1 = 2 + rand() % (max - 1);
+        i2 = 2 + rand() % (max - 1);
+    }
 
     // garantir que os dois segmentos não se sobreponham
     while (conflito) {
