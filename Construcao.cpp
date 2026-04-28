@@ -6,7 +6,7 @@ vector<InsertionInfo> calcularCustoInsercao(Data& data, Solucao& s, vector<int>&
     vector<InsertionInfo> custoInsercao((s.sequence.size() - 1) * CL.size());   // delimitando tamanho do vetor
     int l = 0;
 
-    for (int a = 0; a < s.sequence.size(); a++) {
+    for (int a = 0; a < s.sequence.size() - 1; a++) {
         int i = s.sequence[a];
         int j = s.sequence[a+1];
 
@@ -79,14 +79,7 @@ void ordenarEmOrdemCrescente(vector<InsertionInfo>& custoInsercao) {
 // aqui eu to recebendo como parâmetro o insertionInfo completo do nó selecionado porque eu vou precisar saber
 // em qual posição eu insiro o nó na solução
 void inserirNaSolucao(Solucao& s, InsertionInfo selecionado) {
-    // vertice inicial onde será posicionado o novo nó 
-    int vertice = selecionado.arestaRemovida;
-
-    // posição do vértice
-    auto pos = find(s.sequence.begin(), s.sequence.end(), vertice);
-
-    // inserção do nó
-    s.sequence.insert(pos+1, selecionado.noInserido);
+    s.sequence.insert(s.sequence.begin() + selecionado.arestaRemovida + 1, selecionado.noInserido);
 }
 
 Solucao Construcao(Data& data) {
@@ -107,7 +100,8 @@ Solucao Construcao(Data& data) {
 
         inserirNaSolucao(s, custoInsercao[selecionado]);
 
-        CL.erase(CL.begin() + selecionado); // removendo o nó selecionado do CL
+        auto pos = find(CL.begin(), CL.end(), custoInsercao[selecionado].noInserido);
+        CL.erase(pos); // removendo o nó selecionado do CL
     }
 
     calcularCusto(data, &s);
