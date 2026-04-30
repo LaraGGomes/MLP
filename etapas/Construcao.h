@@ -1,7 +1,7 @@
 #ifndef CONSTRUCAO_H
 #define CONSTRUCAO_H
 
-#include "Solucao.h"
+#include "../Solucao.h"
 #include <cstdlib>
 #include <algorithm>
 

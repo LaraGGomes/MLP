@@ -1,7 +1,7 @@
 #ifndef PERTUBACAO_H
 #define PERTUBACAO_H
 
-#include "Solucao.h"
+#include "../Solucao.h"
 #include <algorithm>
 #include <cstdlib>
 #include <ctime>

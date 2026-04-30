@@ -1,7 +1,7 @@
 #ifndef BUSCALOCAL_H
 #define BUSCALOCAL_H
 
-#include "Solucao.h"
+#include "../Solucao.h"
 #include <cstdlib>
 
 bool bestImprovementSwap(Data& data, Solucao *s);
