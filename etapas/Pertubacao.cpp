@@ -1,14 +1,12 @@
 #include "Pertubacao.h"
 
-Solucao Pertubacao(Data& data, Solucao s) {
+Solucao Pertubacao(Data& data, Solucao& s) {
     Solucao novaS;
     bool conflito = true;
     int i1, i2;         // intervalos dos segmentos
     int pos1, pos2;     // posição inicial de cada intervalo
-    int max = ceil((s.sequence.size() - 1) / 10.0);   // perguntar pra Marcelo se é módulo de 10 ou to interpretando errado
-
-    novaS.sequence = s.sequence;
-
+    int max = ceil((s.sequence.size() - 1) / 10.0);
+    
     srand(time(NULL));
 
     if (max <= 2)
@@ -24,61 +22,49 @@ Solucao Pertubacao(Data& data, Solucao s) {
         pos1 = 1 + rand() % (limite - i1);
         pos2 = 1 + rand() % (limite - i2);
 
-        if (pos1 < pos2 && pos1 + i1 <= pos2 || pos1 > pos2 && pos1 >= pos2 + i2) {
+        // duas condições de não ter conflito
+        if (pos1 < pos2 && pos1 + i1 <= pos2) {
             conflito = false;
         }
-        // ou coloco pos1 < pos2 && pos1 + i1 <= pos2, limitando que s1 seja antes de s2
-    }
+        // nesse caso, troco as variáveis pra pos1 ser sempre antes
+        else if (pos1 > pos2 && pos1 >= pos2 + i2) {
+            swap(pos1,pos2);
+            swap(i1,i2);
 
-    vector<int> s1(novaS.sequence.begin() + pos1, novaS.sequence.begin() + pos1 + i1); // sequencia 1
-    vector<int> s2(novaS.sequence.begin() + pos2, novaS.sequence.begin() + pos2 + i2); // sequencia 2
-
-    int s1_ante = novaS.sequence[pos1-1];
-
-    // inserindo s1
-    for(int i = s1.size() - 1; i >= 0; i--) {
-        novaS.sequence.insert(novaS.sequence.begin() + pos2, s1[i]);
-    }
-
-    auto pos_ante = find(novaS.sequence.begin(), novaS.sequence.end(), s1_ante);
-
-    // o mais a direita deve ser removido primeiro
-    if (pos1 > pos2) {
-        // remove s1 antigo
-        for (int _ : s1) {
-            novaS.sequence.erase(pos_ante + 1);
-        }
-
-        // remove s2
-        for (int _ : s2) {
-            novaS.sequence.erase(novaS.sequence.begin() + pos2 + s1.size());
+            conflito = false;
         }
     }
+
+    // cálculo do custo da nova solução
+    double delta;
+    int v1 = s.sequence[pos1], v1_ante = s.sequence[pos1-1], v1_last = s.sequence[pos1+i1-1];
+    int v2 = s.sequence[pos2], v2_prox = s.sequence[pos2+i2], v2_last = s.sequence[pos2+i2-1];
+
+    if(pos2 == pos1 + i1) // caso forem adjacentes
+        delta = -data.d(v1_ante, v1) + data.d(v1_ante, v2) - data.d(v2_last, v2_prox) + data.d(v2_last, v1) - data.d(v1_last, v2) + data.d(v1_last, v2_prox);
 
     else {
-        // remove s2
-        for (int _ : s2) {
-            novaS.sequence.erase(novaS.sequence.begin() + pos2 + s1.size());
-        }
+        int v1_prox = s.sequence[pos1+i1], v2_ante = s.sequence[pos2-1];
 
-        // remove s1 antigo
-        for (int _ : s1) {
-            novaS.sequence.erase(pos_ante + 1);
-        }
-
+        delta = -data.d(v1_ante, v1) + data.d(v1_ante, v2) - data.d(v2_last, v2_prox) + data.d(v2_last, v1_prox) - data.d(v2_ante, v2) + data.d(v2_ante, v1) - data.d(v1_last, v1_prox) + data.d(v1_last, v2_prox);
     }
 
-    // insere s2
-    if (pos1 < pos2) {
-        for(int i = s2.size() - 1; i >= 0; i--)
-            novaS.sequence.insert(novaS.sequence.begin() + pos1, s2[i]);
-    }
-    else {
-        for(int i = s2.size() - 1; i >= 0; i--)
-            novaS.sequence.insert(novaS.sequence.begin() + pos1 - s2.size() + s1.size(), s2[i]);
-    }
+    novaS.cost = s.cost + delta;
 
-    calcularCusto(data, &novaS);
+    // alocação da nova solução
+    vector<int> s1(s.sequence.begin() + pos1, s.sequence.begin() + pos1 + i1); // sequencia 1
+    vector<int> s2(s.sequence.begin() + pos2, s.sequence.begin() + pos2 + i2); // sequencia 2
+    novaS.sequence.reserve(s.sequence.size());  // definindo tamanho
+
+    novaS.sequence.insert(novaS.sequence.end(), s.sequence.begin(), s.sequence.begin() + pos1);
+
+    novaS.sequence.insert(novaS.sequence.end(), s2.begin(), s2.end());
+
+    novaS.sequence.insert(novaS.sequence.end(), s.sequence.begin() + pos1 + i1, s.sequence.begin() + pos2);
+
+    novaS.sequence.insert(novaS.sequence.end(), s1.begin(), s1.end());
+
+    novaS.sequence.insert(novaS.sequence.end(), s.sequence.begin() + pos2 + i2, s.sequence.end());
 
     return novaS;
 }

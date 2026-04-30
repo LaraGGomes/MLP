@@ -66,12 +66,8 @@ void ordenarEmOrdemCrescente(vector<InsertionInfo>& custoInsercao) {
 
         for (int j = i+1; j < custoInsercao.size(); j++) {
 
-            if (custoInsercao[i].custo > custoInsercao[j].custo) {
-                InsertionInfo aux = custoInsercao[i];
-                custoInsercao[i] = custoInsercao[j];
-                custoInsercao[j] = aux;
-            }
-
+            if (custoInsercao[i].custo > custoInsercao[j].custo)
+                swap(custoInsercao[i], custoInsercao[j]);
         }
     }
 }
