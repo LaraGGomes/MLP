@@ -17,10 +17,10 @@ Os passos são:
 * Busca Local
 * Pertubação
 
-Vou implementar as funções de cada etapa em um .h separadamente, para então junta-los em uma
-biblioteca conjunta com quaisquer outras funções necessárias.
+Vou implementar as funções de cada etapa em um .h separadamente, para então junta-los no framework
+com quaisquer outras funções necessárias.
 
-Na main vão ter o maxIter e maxIterIls, que serão parâmetros na chamada da função SolutionILS().
+Na main vão ter o maxIter e maxIterIls, que serão parâmetros na chamada da função ILS().
 
 ## Rodar o código com uma instância
 
@@ -31,3 +31,9 @@ Compilar o programa:
 Rodar uma instância:
 
     ./programa.exe leitor-instancias/instances/nomedainstancia.tsp
+
+## Resultados
+
+Resultados dos testes de algumas instâncias estão localizados numa tabela no arquivo 
+**resultados_instancias.csv**, com um registro do tempo e custo médio após rodar determinada
+instância 10 vezes, assim como o menor custo obtido.
