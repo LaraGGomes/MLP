@@ -51,8 +51,8 @@ vector<int> nosRestantes(Data& data, vector<int> sequencia) {
     vector<int> CL;
 
     // aqui o intuito é inserir cada vértice no vetor, caso ele não seja encontrado na sequência
-    for (int i = 1; i <= data.getDimension(); i++) {
-        if (find(sequencia.begin(), sequencia.end(), i) == sequencia.end()) {
+    for (int i = 2; i <= data.getDimension(); i++) {
+        if (find(sequencia.begin() + 1, sequencia.end() - 1, i) == sequencia.end() - 1) {
             CL.push_back(i);
         }
     }
