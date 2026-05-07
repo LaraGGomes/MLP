@@ -86,7 +86,8 @@ Solucao Construcao(Data& data) {
 
         ordenarEmOrdemCrescente(custoInsercao);
 
-        double alpha = (double)rand()/RAND_MAX;
+        double alpha = 0;
+        while(!alpha) alpha = (double)rand()/RAND_MAX;
         int selecionado = rand()%((int)ceil(alpha * custoInsercao.size()));
 
         inserirNaSolucao(s, custoInsercao[selecionado]);
