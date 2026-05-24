@@ -47,30 +47,42 @@ vector<int> escolher3NosAleatorios(Data& data) {
     return s;
 }
 
-vector<int> nosRestantes(Data& data, vector<int> sequencia) {
+vector<int> nosRestantes(Data& data) {
     vector<int> CL;
 
-    // aqui o intuito é inserir cada vértice no vetor, caso ele não seja encontrado na sequência
-    for (int i = 2; i <= data.getDimension(); i++) {
-        if (find(sequencia.begin() + 1, sequencia.end() - 1, i) == sequencia.end() - 1) {
-            CL.push_back(i);
-        }
-    }
+    for (int i = 2; i <= data.getDimension(); i++) 
+        CL.push_back(i);
 
     return CL;
 }
 
-void ordenarEmOrdemCrescente(vector<InsertionInfo>& custoInsercao) {
+void ordenarEmOrdemCrescente(Data& data, vector<int>& CL, int r) {
 
-    sort(custoInsercao.begin(), custoInsercao.end(), [](const InsertionInfo& a, const InsertionInfo& b) { 
-        return a.custo < b.custo;
+    sort(CL.begin(), CL.end(), [&](int a, int b) { 
+        return data.d(r, a) < data.d(r, b);
     });
+}
+
+vector<int> melhoresCL(vector<int>& CL, double alpha) {
+
+    vector<int> RCL;
+    double x = alpha*CL.size();
+
+    for (int i = 0; i < x; i++) 
+        RCL.push_back(CL[i]);
+
+    return RCL;
 }
 
 // aqui eu to recebendo como parâmetro o insertionInfo completo do nó selecionado porque eu vou precisar saber
 // em qual posição eu insiro o nó na solução
 void inserirNaSolucao(Solucao& s, InsertionInfo selecionado) {
     s.sequence.insert(s.sequence.begin() + selecionado.arestaRemovida + 1, selecionado.noInserido);
+}
+
+void inserirNaSequencia(Data& data, Solucao &s, int c) {
+    s.cost += data.d(s.sequence.back(), c);
+    s.sequence.push_back(c);
 }
 
 Solucao Construcao(Data& data) {
@@ -96,7 +108,65 @@ Solucao Construcao(Data& data) {
         CL.erase(pos); // removendo o nó selecionado do CL
     }
 
-    calcularCusto(data, &s);
+    //calcularCusto(data, &s);
+    // talvez ao invés de calcular o custo aqui eu posso só adicionar o custo ao inserir na solucao
+
+    return s;
+}
+
+/*
+Nova Construção!!
+
+alpha escolhido random em R
+sequencia inicializada como {1}
+CL inicializada {2 ,.., n}
+r = 1
+
+while (!CL.empty()) {
+    ordernar CL por distancia em referencia a r
+    RCL recebe random melhores (assumindo menores) do CL
+    escolho c de RCL random
+    insiro c na sequencia
+    r = c
+    tiro r de CL
+}
+
+*/
+
+Solucao Construcao(Data& data, vector<double>& R) {
+    int index = rand()% R.size();
+    double alpha = R[index];
+
+    Solucao s;
+    s.sequence = {1};
+    s.cost = 0;
+
+    vector<int> CL = nosRestantes(data);
+
+    int r = 1;
+
+    while (!CL.empty()) {
+        ordenarEmOrdemCrescente(data, CL, r);
+
+        vector<int> RCL = melhoresCL(CL, alpha);
+
+        index = rand()%RCL.size();
+        int c = RCL[index];
+
+        inserirNaSequencia(data, s, c);
+
+        r = c;
+
+        CL.erase(CL.begin() + index);
+    }
+
+    /*
+    Modificações:
+    - não usa mais insertation info, nem as primeiras duas funções
+    - escolhi os alpha porcento melhores de CL, verificar sse é isso mesmo 
+    - verificar tb se o index tá correto na remoção de CL
+    - fazendo cálculo de custo durante inserção
+    */
 
     return s;
 }
