@@ -7,17 +7,10 @@
 
 using namespace std;
 
-typedef struct InsertionInfo {
-    int noInserido;
-    int arestaRemovida;
-    double custo;
-}InsertionInfo;
-
-Solucao Construcao(Data& data);
-vector<InsertionInfo> calcularCustoInsercao(Data& data, Solucao& s, vector<int>& CL);
-vector<int> escolher3NosAleatorios(Data& data);
+Solucao Construcao(Data& data, vector<int> R);
 vector<int> nosRestantes(Data& data, vector<int> sequencia);
-void ordenarEmOrdemCrescente(vector<InsertionInfo>& custoInsercao);
-void inserirNaSolucao(Solucao& s, InsertionInfo selecionado);
+void ordenarEmOrdemCrescente(Data& data, vector<int>& CL, int r);
+vector<int> melhoresCL(vector<int>& CL, double alpha);
+void inserirNaSequencia(Data& data, Solucao &s, int c);
 
 #endif
