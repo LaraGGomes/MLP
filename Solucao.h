@@ -35,7 +35,7 @@ typedef struct Subsequence {
 void exibirSolucao(Solucao *s);
 void calcularCusto(Data& data, Solucao *s);
 void updateAllSubseq(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix);
-void updateSubseq(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix);
+void updateSubseq(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix, int i, int j);
 
 #define d(x, y) getDistance(x, y)
 // pra simplificar o getDistance, que calcula o custo entre dois vértices
