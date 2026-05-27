@@ -10,7 +10,15 @@ void exibirSolucao(Solucao *s) {
 void calcularCusto(Data& data, Solucao *s) {
     s->cost = 0;
     for (int i = 0; i < s->sequence.size() - 1; i++)
-        s->cost += data.d(s->sequence[i], s->sequence[i+1]);
+        s->cost += latencia(data, s, i);
+}
+
+int latencia(Data& data, Solucao *s, int x) {
+    int latencia = 0;
+    for (int i = 0; i < x; i++) 
+        latencia += data.d(s->sequence[i], s->sequence[+1]);
+
+    return latencia;
 }
 
 void updateAllSubseq(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix) {

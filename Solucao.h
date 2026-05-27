@@ -33,6 +33,7 @@ typedef struct Subsequence {
 } Subsequence;
 
 void exibirSolucao(Solucao *s);
+int latencia(Data& data, Solucao *s, int x);
 void calcularCusto(Data& data, Solucao *s);
 void updateAllSubseq(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix);
 void updateSubseq(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix, int i, int j);
