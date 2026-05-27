@@ -10,17 +10,18 @@ int main(int argc, char** argv) {
 
     data.read();
 
-    int maxIterILS;
+    int maxIter = 10, maxIterILS;
     int V = data.getDimension();
+    vector<double> R(25);
+
+    double xi = 0.00, xf = 0.25, pulo = 0.01;
+    for (int i = 0; i < 25; i++) R[i] = xi + i*pulo;
     
     srand(time(NULL));
 
-    if (V >= 150)
-        maxIterILS = V/2;
-    else 
-        maxIterILS = V;
+    maxIterILS = min(100, V);
 
-    Solucao melhorSolucao = ILS(data, 50, maxIterILS);
+    Solucao melhorSolucao = ILS(data, maxIter, maxIterILS, R);
 
     cout << "\nCusto da melhor solucao encontrada: " << melhorSolucao.cost << endl;
 
