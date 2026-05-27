@@ -28,9 +28,9 @@ vector<int> melhoresCL(vector<int>& CL, double alpha) {
 }
 
 
-void inserirNaSequencia(Data& data, Solucao &s, int c) {
-    s.cost += data.d(s.sequence.back(), c);
-    s.sequence.push_back(c);
+void inserirNaSequencia(Data& data, Solucao *s, int c) {
+    s->sequence.push_back(c);
+    //s->cost += latencia(data, s, s->sequence.size());
 }
 
 /*
@@ -72,7 +72,7 @@ Solucao Construcao(Data& data, vector<double>& R) {
         index = rand()%RCL.size();
         int c = RCL[index];
 
-        inserirNaSequencia(data, s, c);
+        inserirNaSequencia(data, &s, c);
 
         r = c;
 
@@ -80,6 +80,7 @@ Solucao Construcao(Data& data, vector<double>& R) {
     }
 
     s.sequence.push_back(1);
+    calcularCusto(data, &s);
 
     /*
     Modificações:

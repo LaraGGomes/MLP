@@ -6,6 +6,6 @@
 #include "etapas/BuscaLocal.h"
 #include "etapas/Pertubacao.h"
 
-Solucao ILS(Data& data, int maxIter, int maxIterIls);
+Solucao ILS(Data& data, int maxIter, int maxIterIls, vector<double>& R);
 
 #endif

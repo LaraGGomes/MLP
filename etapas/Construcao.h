@@ -7,10 +7,10 @@
 
 using namespace std;
 
-Solucao Construcao(Data& data, vector<int> R);
+Solucao Construcao(Data& data, vector<double>& R);
 vector<int> nosRestantes(Data& data, vector<int> sequencia);
 void ordenarEmOrdemCrescente(Data& data, vector<int>& CL, int r);
 vector<int> melhoresCL(vector<int>& CL, double alpha);
-void inserirNaSequencia(Data& data, Solucao &s, int c);
+void inserirNaSequencia(Data& data, Solucao *s, int c);
 
 #endif
