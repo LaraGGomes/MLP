@@ -1,7 +1,7 @@
 #include "BuscaLocal.h"
 
 bool bestImprovementSwap(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix) {
-    double bestC = 0;
+    double bestC = s->cost;
     int best_i, best_j;
     int n = data.getDimension();
 
@@ -15,7 +15,7 @@ bool bestImprovementSwap(Data& data, Solucao *s, vector<vector<Subsequence>>& su
 
             double C = sigma_4.C;
 
-            if(C < s->cost && C < bestC) {
+            if(C < bestC) {
                 bestC = C;
                 best_i = i;
                 best_j = j;
@@ -23,7 +23,7 @@ bool bestImprovementSwap(Data& data, Solucao *s, vector<vector<Subsequence>>& su
         }
     }
 
-    if(bestC < 0) {
+    if(bestC < s->cost) {
         swap(s->sequence[best_i], s->sequence[best_j]);
 
         s->cost = bestC;
@@ -39,7 +39,7 @@ bool bestImprovementSwap(Data& data, Solucao *s, vector<vector<Subsequence>>& su
 // seleciona dois vértices não adjacentes, remove as arestas,
 // inverter todos os segmentos entre elas, e colocar arestas novas
 bool bestImprovement2Opt(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix) {
-    double bestC = 0;
+    double bestC = s->cost;
     int best_i, best_j;
     int n = data.getDimension();
 
@@ -52,7 +52,7 @@ bool bestImprovement2Opt(Data& data, Solucao *s, vector<vector<Subsequence>>& su
 
             double C = sigma_2.C;
 
-            if(C < s->cost && C < bestC) {
+            if(C < bestC) {
                 bestC = C;
                 best_i = i;
                 best_j = j;
@@ -60,7 +60,7 @@ bool bestImprovement2Opt(Data& data, Solucao *s, vector<vector<Subsequence>>& su
         }
     }
 
-    if (bestC < 0) {
+    if (bestC < s->cost) {
         swap(s->sequence[best_i+1], s->sequence[best_j]);
 
         // inversão do segmento entre as arestas
@@ -80,32 +80,39 @@ bool bestImprovement2Opt(Data& data, Solucao *s, vector<vector<Subsequence>>& su
 
 // seleciona x vértices adjacentes, remove e então reensere em uma nova posição
 bool bestImprovementOrOpt(Data &data, Solucao *s, int tipo, vector<vector<Subsequence>>& subseq_matrix) {
-    double bestDelta = 0;
+    double bestC = s->cost;
     int best_i, best_j;
+    int n = data.getDimension();
 
     for(int i = 1; i <= s->sequence.size() - 1 - tipo; i++) {
-        int vi = s->sequence[i];
-        int vi_prox = s->sequence[i+tipo];
-        int vi_ante = s->sequence[i-1];
-        int vi_last = s->sequence[i+tipo-1];
 
         for(int j = 1; j < s->sequence.size() - 1; j++) {
             if (j - i <= tipo + 1 && j - i >= 0) continue;
 
-            int vj = s->sequence[j];
-            int vj_ante = s->sequence[j-1];
+            Subsequence sigma_1, sigma_2, sigma_3;
 
-            double delta = -data.d(vi_ante, vi) + data.d(vi_ante, vi_prox) - data.d(vj_ante, vj) + data.d(vj_ante, vi) - data.d(vi_last, vi_prox) + data.d(vi_last, vj);
+            if (i < j) {
+                sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][i-1], subseq_matrix[i+tipo][j-1]);
+                sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[i][i+tipo-1]);
+                sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[j][n]);
+            }
+            else {
+                sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][j-1], subseq_matrix[i][i+tipo-1]);
+                sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[j][i-1]);
+                sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[i+tipo][n]);
+            }
 
-            if(delta < bestDelta) {
-                bestDelta = delta;
+            double C = sigma_3.C;
+
+            if(C < bestC) {
+                bestC = C;
                 best_i = i;
                 best_j = j;
             }
         }
     }
 
-    if (bestDelta < 0) {
+    if (bestC < s->cost) {
         vector<int> segmento(s->sequence.begin() + best_i, s->sequence.begin() + best_i + tipo);
 
         s->sequence.erase(s->sequence.begin() + best_i, s->sequence.begin() + best_i + tipo);
@@ -115,7 +122,9 @@ bool bestImprovementOrOpt(Data &data, Solucao *s, int tipo, vector<vector<Subseq
         else 
             s->sequence.insert(s->sequence.begin() + best_j, segmento.begin(), segmento.end());
 
-        s->cost += bestDelta;
+        s->cost = bestC;
+
+        updateSubseq(data, s, subseq_matrix, best_i, best_j);
 
         return true;
     }
