@@ -21,6 +21,8 @@ vector<int> melhoresCL(vector<int>& CL, double alpha) {
     vector<int> RCL;
     double x = alpha*CL.size();
 
+    if (x < 1) RCL.push_back(CL[0]);
+
     for (int i = 0; i < x; i++) 
         RCL.push_back(CL[i]);
 
@@ -69,7 +71,7 @@ Solucao Construcao(Data& data, vector<double>& R) {
 
         vector<int> RCL = melhoresCL(CL, alpha);
 
-        index = rand()%RCL.size();
+        index = rand()% RCL.size();
         int c = RCL[index];
 
         inserirNaSequencia(data, &s, c);
