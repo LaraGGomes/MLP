@@ -21,7 +21,7 @@ vector<int> melhoresCL(vector<int>& CL, double alpha) {
     vector<int> RCL;
     double x = alpha*CL.size();
 
-    if (x < 1) RCL.push_back(CL[0]);
+    if (x < 1) x = 1;
 
     for (int i = 0; i < x; i++) 
         RCL.push_back(CL[i]);
@@ -81,7 +81,7 @@ Solucao Construcao(Data& data, vector<double>& R) {
         CL.erase(CL.begin() + index);
     }
 
-    s.sequence.push_back(1);
+    // s.sequence.push_back(1);
     calcularCusto(data, &s);
 
     /*
