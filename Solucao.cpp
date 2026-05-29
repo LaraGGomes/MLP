@@ -8,17 +8,13 @@ void exibirSolucao(Solucao *s) {
 }
 
 void calcularCusto(Data& data, Solucao *s) {
-    s->cost = 0;
-    for (int i = 0; i < s->sequence.size() - 1; i++)
-        s->cost += latencia(data, s, i);
-}
+    double latencia = 0, soma = 0;
+    for (int i = 1; i < s->sequence.size() - 1; i++) {
+        latencia += data.d(s->sequence[i-1], s->sequence[i]);
+        soma += latencia;
+    }
 
-int latencia(Data& data, Solucao *s, int x) {
-    int latencia = 0;
-    for (int i = 0; i < x; i++) 
-        latencia += data.d(s->sequence[i], s->sequence[+1]);
-
-    return latencia;
+    s->cost = soma;
 }
 
 void updateAllSubseq(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix) {
@@ -61,18 +57,14 @@ void updateSubseq(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_ma
     }
     
     // atuliza subsequências que contém os nós que fazem parte do movimento
-    for (int i = 0; i < n; i++) {
-        for (int j = i+1; j < n; j++) {
-            if (j >= first) 
-                subseq_matrix[i][j] = Subsequence::Concatenate(data, subseq_matrix[i][j-1], subseq_matrix[j][j]);
-        }
+    for (int i = 0; i <= last; i++) {
+        for (int j = max(first, i+1); j < n; j++)
+            subseq_matrix[i][j] = Subsequence::Concatenate(data, subseq_matrix[i][j-1], subseq_matrix[j][j]);
     }
 
     // mesma coisa pras sequências invertidas
-    for (int i = n-1; i >= 0; i--) {
-        for (int j = j-1; j >= 0; j--){
-            if (j <= last)
-                subseq_matrix[i][j] = Subsequence::Concatenate(data, subseq_matrix[i][j+1], subseq_matrix[j][j]);
-        }
+    for (int i = n-1; i >= first; i--) {
+        for (int j = min(last, i-1); j >= 0; j--)
+            subseq_matrix[i][j] = Subsequence::Concatenate(data, subseq_matrix[i][j+1], subseq_matrix[j][j]);
     }
 }
