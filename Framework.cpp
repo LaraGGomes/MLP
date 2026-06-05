@@ -23,7 +23,8 @@ Solucao ILS(Data& data, int maxIter, int maxIterIls, vector<double>& R) {
                 iterIls = 0;
             }
 
-            s = Pertubacao(data, best);
+            s = Pertubacao(data, best, subseq_matrix);
+            updateAllSubseq(data, &s, subseq_matrix);
             iterIls++;
         }
 

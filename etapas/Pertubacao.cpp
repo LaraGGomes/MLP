@@ -1,6 +1,6 @@
 #include "Pertubacao.h"
 
-Solucao Pertubacao(Data& data, Solucao& s) {
+Solucao Pertubacao(Data& data, Solucao& s, vector<vector<Subsequence>>& subseq_matrix) {
     Solucao novaS;
     bool conflito = true;
     int i1, i2;         // intervalos dos segmentos
@@ -34,20 +34,26 @@ Solucao Pertubacao(Data& data, Solucao& s) {
     }
 
     // cálculo do custo da nova solução
-    double delta;
-    int v1 = s.sequence[pos1], v1_ante = s.sequence[pos1-1], v1_last = s.sequence[pos1+i1-1];
-    int v2 = s.sequence[pos2], v2_prox = s.sequence[pos2+i2], v2_last = s.sequence[pos2+i2-1];
+    double novoC;
+    Subsequence sigma_1, sigma_2, sigma_3;
+    sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][pos1-1], subseq_matrix[pos2][pos2+i2-1]);
 
-    if(pos2 == pos1 + i1) // caso forem adjacentes
-        delta = -data.d(v1_ante, v1) + data.d(v1_ante, v2) - data.d(v2_last, v2_prox) + data.d(v2_last, v1) - data.d(v1_last, v2) + data.d(v1_last, v2_prox);
-
+    // adjacência
+    if (pos1+i1 == pos2) sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[pos1][pos1+i1-1]);
     else {
-        int v1_prox = s.sequence[pos1+i1], v2_ante = s.sequence[pos2-1];
-
-        delta = -data.d(v1_ante, v1) + data.d(v1_ante, v2) - data.d(v2_last, v2_prox) + data.d(v2_last, v1_prox) - data.d(v2_ante, v2) + data.d(v2_ante, v1) - data.d(v1_last, v1_prox) + data.d(v1_last, v2_prox);
+        Subsequence sigma_aux = Subsequence::Concatenate(data, sigma_1, subseq_matrix[pos1+i1][pos2-1]);
+        sigma_2 = Subsequence::Concatenate(data, sigma_aux, subseq_matrix[pos1][pos1+i1-1]);
     }
 
-    novaS.cost = s.cost + delta;
+    // segundo segmento termina a sequência
+    if (pos2+i2 == s.sequence.size() - 1) novoC = sigma_2.C;
+    
+    else {
+        sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[pos2+i2][s.sequence.size()-1]);
+        novoC = sigma_3.C;
+    }
+
+    novaS.cost = novoC;
 
     // alocação da nova solução
     vector<int> s1(s.sequence.begin() + pos1, s.sequence.begin() + pos1 + i1); // sequencia 1

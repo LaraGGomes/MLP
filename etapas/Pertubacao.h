@@ -6,6 +6,6 @@
 #include <cstdlib>
 #include <ctime>
 
-Solucao Pertubacao(Data& data, Solucao& s);
+Solucao Pertubacao(Data& data, Solucao& s, vector<vector<Subsequence>>& subseq_matrix);
 
 #endif
