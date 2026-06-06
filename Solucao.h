@@ -18,6 +18,8 @@ typedef struct Subsequence {
     int W;          // custo de atraso
     int first, last;
 
+    Subsequence(): T(0), C(0), W(0), first(0), last(0) {}
+
     // função Concatenate()
     inline static Subsequence Concatenate(Data& data, Subsequence &sigma_1, Subsequence &sigma_2) {
         Subsequence sigma;

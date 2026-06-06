@@ -9,7 +9,7 @@ void exibirSolucao(Solucao *s) {
 
 void calcularCusto(Data& data, Solucao *s) {
     double latencia = 0, soma = 0;
-    for (int i = 1; i < s->sequence.size() - 1; i++) {
+    for (int i = 1; i < s->sequence.size(); i++) {
         latencia += data.d(s->sequence[i-1], s->sequence[i]);
         soma += latencia;
     }

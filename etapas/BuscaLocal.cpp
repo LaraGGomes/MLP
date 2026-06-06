@@ -1,8 +1,5 @@
 #include "BuscaLocal.h"
 
-// vou voltar aqui e olhar tudão denovo ainda, 
-// mas creio que sejam erros na modificação das soluções em cada movimento
-
 bool bestImprovementSwap(Data& data, Solucao *s, vector<vector<Subsequence>>& subseq_matrix) {
     double bestC = s->cost;
     int best_i, best_j;
@@ -10,7 +7,7 @@ bool bestImprovementSwap(Data& data, Solucao *s, vector<vector<Subsequence>>& su
 
     for(int i = 1; i < s->sequence.size() - 1; i++) {
 
-        for(int j = i + 1; j <= s->sequence.size() - 1; j++) {
+        for(int j = i + 1; j < s->sequence.size(); j++) {
             double C;
 
             Subsequence sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][i-1], subseq_matrix[j][j]);
@@ -65,11 +62,15 @@ bool bestImprovement2Opt(Data& data, Solucao *s, vector<vector<Subsequence>>& su
     for (int i = 1; i < s->sequence.size() - 1; i++) {
 
         // segunda condição garante que não vão haver arestas adjacentes
-        for (int j = i + 2; j < s->sequence.size() - 1 && s->sequence[j+1] != s->sequence[i]; j++) {
+        for (int j = i + 2; j < s->sequence.size(); j++) {
+            double C;
             Subsequence sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][i-1], subseq_matrix[j][i]);
-            Subsequence sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[j+1][n-1]);
 
-            double C = sigma_2.C;
+            if (j == n-1) C = sigma_1.C;
+            else {
+                Subsequence sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[j+1][n-1]);
+                C = sigma_2.C;
+            }
 
             if(C < bestC) {
                 bestC = C;
@@ -130,7 +131,7 @@ bool bestImprovementOrOpt(Data &data, Solucao *s, int tipo, vector<vector<Subseq
         }
     }
 
-    if (bestC < s->cost) {
+    if (bestC < s->cost) {        
         vector<int> segmento(s->sequence.begin() + best_i, s->sequence.begin() + best_i + tipo);
 
         s->sequence.erase(s->sequence.begin() + best_i, s->sequence.begin() + best_i + tipo);
@@ -142,7 +143,7 @@ bool bestImprovementOrOpt(Data &data, Solucao *s, int tipo, vector<vector<Subseq
 
         s->cost = bestC;
 
-        updateSubseq(data, s, subseq_matrix, best_i, best_j);
+        updateSubseq(data, s, subseq_matrix, min(best_i, best_j), max(best_i + tipo - 1, best_j));
 
         return true;
     }
