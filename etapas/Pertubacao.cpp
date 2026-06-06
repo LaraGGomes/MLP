@@ -16,7 +16,7 @@ Solucao Pertubacao(Data& data, Solucao& s, vector<vector<Subsequence>>& subseq_m
 
     // garantir que os dois segmentos não se sobreponham
     while (conflito) {
-        int limite = s.sequence.size() - 1;
+        int limite = s.sequence.size();
         pos1 = 1 + rand() % (limite - i1);
         pos2 = 1 + rand() % (limite - i2);
 
@@ -46,7 +46,7 @@ Solucao Pertubacao(Data& data, Solucao& s, vector<vector<Subsequence>>& subseq_m
     }
 
     // segundo segmento termina a sequência
-    if (pos2+i2 == s.sequence.size() - 1) novoC = sigma_2.C;
+    if (pos2+i2 == s.sequence.size()) novoC = sigma_2.C;
     
     else {
         sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[pos2+i2][s.sequence.size()-1]);
