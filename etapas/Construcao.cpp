@@ -81,16 +81,7 @@ Solucao Construcao(Data& data, vector<double>& R) {
         CL.erase(CL.begin() + index);
     }
 
-    // s.sequence.push_back(1);
     calcularCusto(data, &s);
-
-    /*
-    Modificações:
-    - não usa mais insertation info, nem as primeiras duas funções
-    - escolhi os alpha porcento melhores de CL, verificar sse é isso mesmo 
-    - verificar tb se o index tá correto na remoção de CL
-    - fazendo cálculo de custo durante inserção
-    */
 
     return s;
 }
