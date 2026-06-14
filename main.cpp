@@ -23,9 +23,6 @@ int main(int argc, char** argv) {
 
     Solucao melhorSolucao = ILS(data, maxIter, maxIterILS, R);
 
-    melhorSolucao.sequence.push_back(1);
-    calcularCusto(data, &melhorSolucao);
-
     cout << "\nCusto da melhor solucao encontrada: " << melhorSolucao.cost << endl;
 
     return 0;

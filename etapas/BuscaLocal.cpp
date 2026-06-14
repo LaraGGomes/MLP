@@ -7,28 +7,22 @@ bool bestImprovementSwap(Data& data, Solucao *s, vector<vector<Subsequence>>& su
 
     for(int i = 1; i < s->sequence.size() - 1; i++) {
 
-        for(int j = i + 1; j < s->sequence.size(); j++) {
+        for(int j = i + 1; j < s->sequence.size() - 1; j++) {
             double C;
 
             Subsequence sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][i-1], subseq_matrix[j][j]);
 
             if (j == i + 1) {
                 Subsequence sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[i][i]);
-                if (j == n - 1) C = sigma_2.C;
-                else {
-                    Subsequence sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[j+1][n-1]);
-                    C = sigma_3.C;
-                }
+                Subsequence sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[j+1][n]);
+                C = sigma_3.C;
             }
     
             else {
                 Subsequence sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[i+1][j-1]);
                 Subsequence sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[i][i]);
-                if (j == n - 1) C = sigma_3.C;
-                else {
-                    Subsequence sigma_4 = Subsequence::Concatenate(data, sigma_3, subseq_matrix[j+1][n-1]);
-                    C = sigma_4.C;
-                }
+                Subsequence sigma_4 = Subsequence::Concatenate(data, sigma_3, subseq_matrix[j+1][n]);
+                C = sigma_4.C;
             }
 
             if(C < bestC) {
@@ -61,16 +55,11 @@ bool bestImprovement2Opt(Data& data, Solucao *s, vector<vector<Subsequence>>& su
 
     for (int i = 1; i < s->sequence.size() - 1; i++) {
 
-        // segunda condição garante que não vão haver arestas adjacentes
-        for (int j = i + 2; j < s->sequence.size(); j++) {
+        for (int j = i + 2; j < s->sequence.size() - 1; j++) {
             double C;
             Subsequence sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][i-1], subseq_matrix[j][i]);
-
-            if (j == n-1) C = sigma_1.C;
-            else {
-                Subsequence sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[j+1][n-1]);
-                C = sigma_2.C;
-            }
+            Subsequence sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[j+1][n]);
+            C = sigma_2.C;
 
             if(C < bestC) {
                 bestC = C;
@@ -105,7 +94,7 @@ bool bestImprovementOrOpt(Data &data, Solucao *s, int tipo, vector<vector<Subseq
 
     for(int i = 1; i <= s->sequence.size() - 1 - tipo; i++) {
 
-        for(int j = 1; j <= s->sequence.size() - 1; j++) {
+        for(int j = 1; j < s->sequence.size() - 1; j++) {
             if (j - i <= tipo + 1 && j - i >= 0) continue;
 
             Subsequence sigma_1, sigma_2, sigma_3;
@@ -113,12 +102,12 @@ bool bestImprovementOrOpt(Data &data, Solucao *s, int tipo, vector<vector<Subseq
             if (i < j) {
                 sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][i-1], subseq_matrix[i+tipo][j-1]);
                 sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[i][i+tipo-1]);
-                sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[j][n-1]);
+                sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[j][n]);
             }
             else {
                 sigma_1 = Subsequence::Concatenate(data, subseq_matrix[0][j-1], subseq_matrix[i][i+tipo-1]);
                 sigma_2 = Subsequence::Concatenate(data, sigma_1, subseq_matrix[j][i-1]);
-                sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[i+tipo][n-1]);
+                sigma_3 = Subsequence::Concatenate(data, sigma_2, subseq_matrix[i+tipo][n]);
             }
 
             double C = sigma_3.C;
